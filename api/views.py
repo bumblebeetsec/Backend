@@ -5,6 +5,7 @@ from .models import Student, Organisation, Scholarship, Application
 import json
 from json import JSONDecodeError
 from django.forms.models import model_to_dict
+from django.db.models import Q
 
 
 @csrf_exempt
