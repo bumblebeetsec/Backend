@@ -87,6 +87,40 @@ def post_student(request):
         new_org.save()
     return JsonResponse({'success': True})
 
+@csrf_exempt
+def post_scholarship(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid JSON")
+        return JsonResponse({'success': False})
+    try:
+        uid = content['uid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    # existing = Scholarship.objects.filter(uid=uid)
+    # if len(existing) > 0:
+    #     try:
+    #         existing.update(**content)
+    #     except Exception:
+    #         print("Invalid update")
+    #         return JsonResponse({'success': False})
+    existing = Organisation.objects.filter(uid=uid)
+    if len(existing) == 0:
+        print("Invalid UID")
+        return JsonResponse({'success': False})
+    else:
+        del content['uid']
+        try:
+            new_shp = Scholarship(**content)
+        except Exception:
+            print("Invalid create")
+            return JsonResponse({'success': False})
+        new_shp.organisation = existing[0]
+        new_shp.save()
+    return JsonResponse({'success': True})
+
 
 @csrf_exempt
 def get_student(request):

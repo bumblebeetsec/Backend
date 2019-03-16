@@ -213,12 +213,13 @@ class Scholarship(models.Model):
     religion = models.CharField(max_length=16, choices=RELIGION_CHOICES, blank=True, default='')
     max_annual_income = models.PositiveIntegerField(blank=True, null=True)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, blank=True, default='')
-    course = models.CharField(max_length=50, choices=COURSE_CHOICES)
+    course = models.CharField(max_length=50, choices=COURSE_CHOICES, blank=True, default='')
     physically_challenged = models.CharField(
         max_length=10, choices=PHYSICAL_CHOICE, blank=True, default='')
     other_eligibility_details = models.TextField(blank=True)
     scholarship_description = models.TextField()
     organisation = models.ForeignKey(Organisation, related_name='organisation',null=True, on_delete=models.CASCADE)
+    form_link = models.URLField(blank=True, default='')
 
     def __str__(self):
         return self.name
