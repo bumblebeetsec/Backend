@@ -98,11 +98,14 @@ class Student(models.Model):
     phone_number = models.CharField(max_length=16)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     current_course = models.CharField(max_length=50, choices=COURSE_CHOICES)
-    course_interested_in = models.CharField(max_length=50, choices=COURSE_CHOICES)
-    physically_challenged = models.CharField(max_length=10, choices=PHYSICAL_CHOICE)
+    course_interested_in = models.CharField(
+        max_length=50, choices=COURSE_CHOICES)
+    physically_challenged = models.CharField(
+        max_length=10, choices=PHYSICAL_CHOICE)
 
     def __str__(self):
         return self.name
+
 
 class Organisation(models.Model):
     name = models.CharField(max_length=100)
@@ -114,6 +117,7 @@ class Organisation(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Scholarship(models.Model):
     RELIGION_CHOICES = (
@@ -210,9 +214,24 @@ class Scholarship(models.Model):
     max_annual_income = models.PositiveIntegerField()
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     course = models.CharField(max_length=50, choices=COURSE_CHOICES)
-    physically_challenged = models.CharField(max_length=10, choices=PHYSICAL_CHOICE)
+    physically_challenged = models.CharField(
+        max_length=10, choices=PHYSICAL_CHOICE)
     other_eligibility_details = models.TextField()
     scholarship_description = models.TextField()
 
     def __str__(self):
         return self.name
+
+
+class Application(models.Model):
+    STATUS_CHOICES = (
+        ('Pending', 'Pending'),
+        ('Rejected', 'Rejected'),
+        ('Accepted', 'Accepted'),
+    )
+    student = models.ForeignKey(
+        Student, related_name='studentapplication', null=True, on_delete=models.CASCADE)
+    scholarship = models.ForeignKey(
+        Scholarship, related_name='scholarshipapplication', null=True, on_delete=models.CASCADE)
+    application_status = models.CharField(
+        max_length=20, choices=STATUS_CHOICES)
