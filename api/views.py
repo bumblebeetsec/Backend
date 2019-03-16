@@ -334,7 +334,7 @@ def post_application_status(request):
         new_status = content['new_status']
     except KeyError:
         return JsonResponse({'success': False})
-    if new_status == 'Accepted' || new_status == 'Rejected':
+    if new_status == 'Accepted' or new_status == 'Rejected':
         application.application_status = new_status
         application.save()
     return JsonResponse({'success': True})
