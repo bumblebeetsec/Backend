@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class Course(models.Model):
+class Student(models.Model):
     RELIGION_CHOICES = (
         ('Hindu', 'Hindu'),
         ('Muslim', 'Muslim'),
@@ -94,9 +94,7 @@ class Course(models.Model):
     state = models.CharField(max_length=100, choices=STATE_CHOICES)
     religion = models.CharField(max_length=16, choices=RELIGION_CHOICES)
     annual_income = models.PositiveIntegerField()
-    phone_regex = RegexValidator(
-        regex=r'^\+?\d{8,15}$', message="Enter a valid phone number")
-    phone_number = models.CharField(validators=[phone_regex], max_length=16)
+    phone_number = models.CharField(max_length=16)
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES)
     current_course = models.CharField(max_length=50, choices=COURSE_CHOICES)
     course_interested_in = models.CharField(max_length=50, choices=COURSE_CHOICES)
