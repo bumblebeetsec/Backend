@@ -103,10 +103,11 @@ def get_student(request):
         return JsonResponse(student_dict)
 
 
-# @csrf_exempt
-# def get_scholarship(request):
-#     all_scholarships = Scholarship.objects.all()
-#     scholarships = []
-#     for scholarship in all_scholarships:
-#         scholarships.append(model_to_dict(scholarship))
-#     
+@csrf_exempt
+def get_scholarship(request):
+    all_scholarships = Scholarship.objects.all()
+    scholarships = []
+    for scholarship in all_scholarships:
+        scholarships.append(model_to_dict(scholarship))
+    scholarship_dict = {'scholarships': scholarships}
+    

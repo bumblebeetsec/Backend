@@ -218,6 +218,7 @@ class Scholarship(models.Model):
         max_length=10, choices=PHYSICAL_CHOICE)
     other_eligibility_details = models.TextField()
     scholarship_description = models.TextField()
+    organisation = models.ForeignKey(Organisation, related_name='organisation',null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
