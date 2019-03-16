@@ -11,4 +11,5 @@ urlpatterns = [
     path('get/scholarship/', views.get_scholarship, name='get_scholarship'),
     path('get/type/', views.get_type, name='get_type'),
     path('get/scholarship/eligible/', views.get_scholarship_eligible, name='get_scholarship_eligible'),
+    path('get/scholarship/organisation/', views.get_scholarship_organisation, name='get_scholarship_organisation'),
 ]

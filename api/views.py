@@ -176,6 +176,54 @@ def get_scholarship(request):
     scholarship_dict = {'scholarships': scholarships, 'success': True}
     return JsonResponse(scholarship_dict)
 
+@csrf_exempt
+def get_scholarship_details(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        sid = content['sid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    existing = Scholarship.objects.filter(id=sid)
+    if len(existing) == 0:
+        return JsonResponse({'success': False})
+    # scholarships = []
+    # for scholarship in all_scholarships:
+    #     scholarship_entry = {"id": scholarship.id, "name": scholarship.name, "organisation_name":
+    #                          scholarship.organisation.name, "description": scholarship.scholarship_description[:50]}
+    #     scholarships.append(scholarship_entry)
+    scholarship_dict = {'scholarship': model_to_dict(existing[0]), 'success': True}
+    return JsonResponse(scholarship_dict)
+
+@csrf_exempt
+def get_scholarship_organisation(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        uid = content['uid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    existing = Organisation.objects.filter(uid=uid)
+    if len(existing) == 0:
+        return JsonResponse({'success': False})
+    organisation = existing[0]
+    filtered_scholarships = Scholarship.objects.all()
+    scholarships = []
+    for scholarship in filtered_scholarships:
+        scholarship_entry = {"id": scholarship.id, "name": scholarship.name, "organisation_name":
+                             scholarship.organisation.name, "description": scholarship.scholarship_description[:50]}
+        scholarships.append(scholarship_entry)
+    scholarship_dict = {'scholarships': scholarships, 'success': True}
+    return JsonResponse(scholarship_dict)
+
 
 @csrf_exempt
 def get_scholarship_eligible(request):
