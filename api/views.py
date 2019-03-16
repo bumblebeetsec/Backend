@@ -48,10 +48,11 @@ def get_organisation(request):
         return JsonResponse({'success': False})
     existing = Organisation.objects.filter(uid=uid)
     if len(existing) == 0:
-        return JsonResponse({'exists': False})
+        return JsonResponse({'success': True,'exists': False})
     else:
         organisation_dict = model_to_dict(existing[0])
         organisation_dict['exists'] = True
+        organisation_dict['success'] = True
         return JsonResponse(organisation_dict)
 
 @csrf_exempt
@@ -96,11 +97,32 @@ def get_student(request):
         return JsonResponse({'success': False})
     existing = Student.objects.filter(uid=uid)
     if len(existing) == 0:
-        return JsonResponse({'exists': False})
+        return JsonResponse({'success': True,'exists': False})
     else:
         student_dict = model_to_dict(existing[0])
         student_dict['exists'] = True
+        student_dict['success'] = True
         return JsonResponse(student_dict)
+
+@csrf_exempt
+def get_type(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        uid = content['uid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    existing = Student.objects.filter(uid=uid)
+    if len(existing) > 0:
+        return JsonResponse({'success': True, 'type': 'student'})
+    existing = Organisation.objects.filter(uid=uid)
+    if len(existing) > 0:
+        return JsonResponse({'success': True, 'type': 'organisation'})
+    return JsonResponse({'success': True, 'type': 'none'})
 
 
 @csrf_exempt
@@ -110,4 +132,5 @@ def get_scholarship(request):
     for scholarship in all_scholarships:
         scholarships.append(model_to_dict(scholarship))
     scholarship_dict = {'scholarships': scholarships}
+    return JsonResponse(scholarship_dict)
     

@@ -7,5 +7,6 @@ urlpatterns = [
     path('get/organisation/', views.get_organisation, name='get_organisation'),
     path('post/student/', views.post_student, name='post_student'),
     path('get/student/', views.get_student, name='get_student'),
-    # path('get/scholarship/', views.get_scholarship, name='get_scholarship'),
+    path('get/scholarship/', views.get_scholarship, name='get_scholarship'),
+    path('get/type/', views.get_type, name='get_type'),
 ]
