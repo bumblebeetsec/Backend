@@ -9,4 +9,5 @@ urlpatterns = [
     path('get/student/', views.get_student, name='get_student'),
     path('get/scholarship/', views.get_scholarship, name='get_scholarship'),
     path('get/type/', views.get_type, name='get_type'),
+    path('get/scholarship/eligible/', views.get_scholarship_eligible, name='get_scholarship_eligible'),
 ]
