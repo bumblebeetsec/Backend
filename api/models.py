@@ -88,6 +88,7 @@ class Student(models.Model):
         ('No', 'No'),
     )
     name = models.CharField(max_length=100)
+    username = models.CharField(max_length=100)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     email = models.EmailField()
     date_of_birth = models.DateField()
@@ -102,3 +103,10 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+
+class Organisation(models.Model):
+    name = models.CharField(max_length=100)
+    username = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
+    phone_number = models.CharField(max_length=16)
+    website = models.URLField()
