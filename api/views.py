@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Student, Organisation
+from .models import Student, Organisation, Scholarship, Application
 import json
 from json import JSONDecodeError
 from django.forms.models import model_to_dict
@@ -12,7 +12,7 @@ def post_organisation(request):
     try:
         content = json.loads(body_unicode)
     except JSONDecodeError:
-        print("Invalid POST")
+        print("Invalid JSON")
         return JsonResponse({'success': False})
     try:
         uid = content['uid']
@@ -23,13 +23,13 @@ def post_organisation(request):
         try:
             existing.update(**content)
         except Exception:
-            print("Invalid POST")
+            print("Invalid update")
             return JsonResponse({'success': False})
     else:
         try:
             new_org = Organisation(**content)
         except Exception:
-            print("Invalid POST")
+            print("Invalid create")
             return JsonResponse({'success': False})
         new_org.save()
     return JsonResponse({'success': True})
@@ -60,7 +60,7 @@ def post_student(request):
     try:
         content = json.loads(body_unicode)
     except JSONDecodeError:
-        print("Invalid POST")
+        print("Invalid JSON")
         return JsonResponse({'success': False})
     try:
         uid = content['uid']
@@ -71,13 +71,13 @@ def post_student(request):
         try:
             existing.update(**content)
         except Exception:
-            print("Invalid POST")
+            print("Invalid update")
             return JsonResponse({'success': False})
     else:
         try:
             new_org = Student(**content)
         except Exception:
-            print("Invalid POST")
+            print("Invalid create")
             return JsonResponse({'success': False})
         new_org.save()
     return JsonResponse({'success': True})
@@ -101,3 +101,12 @@ def get_student(request):
         student_dict = model_to_dict(existing[0])
         student_dict['exists'] = True
         return JsonResponse(student_dict)
+
+
+# @csrf_exempt
+# def get_scholarship(request):
+#     all_scholarships = Scholarship.objects.all()
+#     scholarships = []
+#     for scholarship in all_scholarships:
+#         scholarships.append(model_to_dict(scholarship))
+#     
