@@ -206,7 +206,7 @@ class Scholarship(models.Model):
     name = models.CharField(max_length=100)
     username = models.CharField(max_length=100)
     uid = models.CharField(max_length=100)
-    gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, default='')
     max_date_of_birth = models.DateField(null=True, blank=True)
     min_date_of_birth = models.DateField(null=True, blank=True)
     state = models.CharField(max_length=100, choices=STATE_CHOICES, blank=True, default='')
@@ -215,7 +215,7 @@ class Scholarship(models.Model):
     category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, blank=True, default='')
     course = models.CharField(max_length=50, choices=COURSE_CHOICES)
     physically_challenged = models.CharField(
-        max_length=10, choices=PHYSICAL_CHOICE)
+        max_length=10, choices=PHYSICAL_CHOICE, blank=True, default='')
     other_eligibility_details = models.TextField(blank=True)
     scholarship_description = models.TextField()
     organisation = models.ForeignKey(Organisation, related_name='organisation',null=True, on_delete=models.CASCADE)
