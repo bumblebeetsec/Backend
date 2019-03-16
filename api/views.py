@@ -167,7 +167,7 @@ def get_scholarship_eligible(request):
     course = student.course_interested_in
     physically_challenged = student.physically_challenged
     filtered_scholarships = Scholarship.objects.filter(Q(gender=gender) | Q(gender='')).filter(Q(state=state) | Q(state='')).filter(Q(religion=religion) | Q(religion='')).filter(Q(max_annual_income=max_annual_income) | Q(
-        max_annual_income='')).filter(Q(category=category) | Q(category='')).filter(Q(course=course)).filter(Q(physically_challenged=physically_challenged) | Q(physically_challenged=''))
+        max_annual_income=None)).filter(Q(category=category) | Q(category='')).filter(Q(course=course)).filter(Q(physically_challenged=physically_challenged) | Q(physically_challenged=''))
     scholarships = []
     for scholarship in filtered_scholarships:
         scholarship_entry = {"id": scholarship.id, "name": scholarship.name, "organisation_name":
