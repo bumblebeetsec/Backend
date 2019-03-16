@@ -356,7 +356,6 @@ def get_scholarship_filter(request):
     params = ['gender',
               'state',
               'religion',
-              'max_annual_income',
               'category',
               'course',
               'physically_challenged', ]
@@ -368,6 +367,13 @@ def get_scholarship_filter(request):
             filtered_scholarships = filtered_scholarships.filter(Q(kwarg1) | Q(kwarg2))
         except KeyError:
             pass
+    try:
+        value = content['max_annual_income']
+        kwarg1 = {'max_annual_income__gte': value}
+        kwarg2 = {'max_annual_income': ''}
+        filtered_scholarships = filtered_scholarships.filter(Q(kwarg1) | Q(kwarg2))
+    except KeyError:
+        pass
     scholarships = []
     for scholarship in filtered_scholarships:
         scholarship_entry = {"id": scholarship.id, "name": scholarship.name, "organisation_name":
