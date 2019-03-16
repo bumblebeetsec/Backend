@@ -364,14 +364,14 @@ def get_scholarship_filter(request):
             value = content[key]
             kwarg1 = {key: value}
             kwarg2 = {key: ''}
-            filtered_scholarships = filtered_scholarships.filter(Q(kwarg1) | Q(kwarg2))
+            filtered_scholarships = filtered_scholarships.filter(Q(**kwarg1) | Q(**kwarg2))
         except KeyError:
             pass
     try:
         value = content['max_annual_income']
         kwarg1 = {'max_annual_income__gte': value}
         kwarg2 = {'max_annual_income': ''}
-        filtered_scholarships = filtered_scholarships.filter(Q(kwarg1) | Q(kwarg2))
+        filtered_scholarships = filtered_scholarships.filter(Q(**kwarg1) | Q(**kwarg2))
     except KeyError:
         pass
     scholarships = []
