@@ -262,6 +262,7 @@ def get_scholarship_eligible(request):
     scholarship_dict = {'scholarships': scholarships, 'success': True}
     return JsonResponse(scholarship_dict)
 
+
 @csrf_exempt
 def post_scholarship_apply(request):
     body_unicode = request.body.decode('utf-8')
@@ -291,6 +292,7 @@ def post_scholarship_apply(request):
     application.save()
     return JsonResponse({'success': True})
 
+
 @csrf_exempt
 def get_scholarship_application(request):
     body_unicode = request.body.decode('utf-8')
@@ -309,10 +311,12 @@ def get_scholarship_application(request):
     applications = Application.objects.filter(scholarship=existing[0])
     application_list = []
     for application in applications:
-        application_entry = {'student_id': application.student.id, 'status': application.application_status}
+        application_entry = {
+            'student_id': application.student.id, 'status': application.application_status}
         application_list.append(application_entry)
     application_dict = {'applications': application_list, 'success': True}
     return JsonResponse(application_dict)
+
 
 @csrf_exempt
 def post_application_status(request):
@@ -338,3 +342,36 @@ def post_application_status(request):
         application.application_status = new_status
         application.save()
     return JsonResponse({'success': True})
+
+
+@csrf_exempt
+def get_scholarship_filter(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    filtered_scholarships = Scholarship.objects.all()
+    params = ['gender',
+              'state',
+              'religion',
+              'max_annual_income',
+              'category',
+              'course',
+              'physically_challenged', ]
+    for key in params:
+        try:
+            value = content[key]
+            kwarg1 = {key: value}
+            kwarg2 = {key: ''}
+            filtered_scholarships = filtered_scholarships.filter(Q(kwarg1) | Q(kwarg2))
+        except KeyError:
+            pass
+    scholarships = []
+    for scholarship in filtered_scholarships:
+        scholarship_entry = {"id": scholarship.id, "name": scholarship.name, "organisation_name":
+                             scholarship.organisation.name, "description": scholarship.scholarship_description[:50]}
+        scholarships.append(scholarship_entry)
+    scholarship_dict = {'scholarships': scholarships, 'success': True}
+    return JsonResponse(scholarship_dict)
