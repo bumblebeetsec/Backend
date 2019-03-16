@@ -78,8 +78,8 @@ def post_student(request):
         new_org = Student(**content)
     # except Exception:
         # raise Exception
-        print("Invalid create")
-        return JsonResponse({'success': False})
+        # print("Invalid create")
+        # return JsonResponse({'success': False})
         new_org.save()
     return JsonResponse({'success': True})
 
