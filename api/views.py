@@ -130,7 +130,8 @@ def get_scholarship(request):
     all_scholarships = Scholarship.objects.all()
     scholarships = []
     for scholarship in all_scholarships:
-        scholarships.append(model_to_dict(scholarship))
+        scholarship_entry = {"id": scholarship.id, "name": scholarship.name, "organisation_name": scholarship.organisation.name, "details": scholarship.details[:30]}
+        scholarships.append(scholarship_entry)
     scholarship_dict = {'scholarships': scholarships}
     return JsonResponse(scholarship_dict)
     
