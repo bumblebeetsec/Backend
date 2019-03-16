@@ -34,7 +34,18 @@ def post_organisation(request):
         new_org.save()
     return JsonResponse({'success': True})
 
-def get_organisation(request, uid):
+@csrf_exempt
+def get_organisation(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        uid = content['uid']
+    except KeyError:
+        return JsonResponse({'success': False})
     existing = Organisation.objects.filter(uid=uid)
     if len(existing) == 0:
         return JsonResponse({'exists': False})
@@ -71,7 +82,18 @@ def post_student(request):
         new_org.save()
     return JsonResponse({'success': True})
 
-def get_student(request, uid):
+@csrf_exempt
+def get_student(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        uid = content['uid']
+    except KeyError:
+        return JsonResponse({'success': False})
     existing = Student.objects.filter(uid=uid)
     if len(existing) == 0:
         return JsonResponse({'exists': False})
