@@ -13,4 +13,7 @@ urlpatterns = [
     path('get/scholarship/eligible/', views.get_scholarship_eligible, name='get_scholarship_eligible'),
     path('get/scholarship/organisation/', views.get_scholarship_organisation, name='get_scholarship_organisation'),
     path('get/scholarship/details/', views.get_scholarship_details, name='get_scholarship_details'),
+    path('get/scholarship/application/', views.get_scholarship_application, name='get_scholarship_application'),
+    path('post/scholarship/apply/', views.post_scholarship_apply, name='post_scholarship_apply'),
+    path('post/application/status/', views.post_application_status, name='post_application_status'),
 ]

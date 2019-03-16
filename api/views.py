@@ -87,6 +87,7 @@ def post_student(request):
         new_org.save()
     return JsonResponse({'success': True})
 
+
 @csrf_exempt
 def post_scholarship(request):
     body_unicode = request.body.decode('utf-8')
@@ -176,6 +177,7 @@ def get_scholarship(request):
     scholarship_dict = {'scholarships': scholarships, 'success': True}
     return JsonResponse(scholarship_dict)
 
+
 @csrf_exempt
 def get_scholarship_details(request):
     body_unicode = request.body.decode('utf-8')
@@ -196,8 +198,10 @@ def get_scholarship_details(request):
     #     scholarship_entry = {"id": scholarship.id, "name": scholarship.name, "organisation_name":
     #                          scholarship.organisation.name, "description": scholarship.scholarship_description[:50]}
     #     scholarships.append(scholarship_entry)
-    scholarship_dict = {'scholarship': model_to_dict(existing[0]), 'success': True}
+    scholarship_dict = {'scholarship': model_to_dict(
+        existing[0]), 'success': True}
     return JsonResponse(scholarship_dict)
+
 
 @csrf_exempt
 def get_scholarship_organisation(request):
@@ -257,3 +261,80 @@ def get_scholarship_eligible(request):
         scholarships.append(scholarship_entry)
     scholarship_dict = {'scholarships': scholarships, 'success': True}
     return JsonResponse(scholarship_dict)
+
+@csrf_exempt
+def post_scholarship_apply(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        uid = content['uid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    existing = Student.objects.filter(uid=uid)
+    if len(existing) == 0:
+        return JsonResponse({'success': False})
+    student = existing[0]
+    try:
+        sid = content['sid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    existing = Scholarship.objects.filter(id=sid)
+    if len(existing) == 0:
+        return JsonResponse({'success': False})
+    scholarship = existing[0]
+    application = Application(
+        student=student, scholarship=scholarship, application_status='Pending')
+    application.save()
+    return JsonResponse({'success': True})
+
+@csrf_exempt
+def get_scholarship_application(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        sid = content['sid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    existing = Scholarship.objects.filter(id=sid)
+    if len(existing) == 0:
+        return JsonResponse({'success': False})
+    applications = Application.objects.filter(scholarship=existing[0])
+    application_list = []
+    for application in applications:
+        application_entry = {'student_id': application.student.id, 'status': application.application_status}
+        application_list.append(application_entry)
+    application_dict = {'applications': application_list, 'success': True}
+    return JsonResponse(application_dict)
+
+@csrf_exempt
+def post_application_status(request):
+    body_unicode = request.body.decode('utf-8')
+    try:
+        content = json.loads(body_unicode)
+    except JSONDecodeError:
+        print("Invalid POST")
+        return JsonResponse({'success': False})
+    try:
+        aid = content['aid']
+    except KeyError:
+        return JsonResponse({'success': False})
+    existing = Application.objects.filter(id=aid)
+    if len(existing) == 0:
+        return JsonResponse({'success': False})
+    application = existing[0]
+    try:
+        new_status = content['new_status']
+    except KeyError:
+        return JsonResponse({'success': False})
+    if new_status == 'Accepted' || new_status == 'Rejected':
+        application.application_status = new_status
+        application.save()
+    return JsonResponse({'success': True})
