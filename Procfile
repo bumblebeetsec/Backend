@@ -1,1 +1,1 @@
-web: gunicorn zombiehat.wsgi --log-file -
+web: gunicorn bumblebee.wsgi --log-file -
