@@ -204,7 +204,7 @@ class Scholarship(models.Model):
         ('No', 'No'),
     )
     name = models.CharField(max_length=100)
-    username = models.CharField(max_length=100)
+    # username = models.CharField(max_length=100)
     # uid = models.CharField(max_length=100)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, blank=True, default='')
     # max_date_of_birth = models.DateField(null=True, blank=True)
